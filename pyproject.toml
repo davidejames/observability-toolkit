@@ -1,0 +1,61 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "observability-toolkit"
+dynamic = ["version"]
+description = 'A python library for adding observability to an application.'
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "David E. James", email = "david.eugene.james@protonmail.com" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = []
+
+[project.urls]
+Documentation = "https://github.com/David E. James/observability-toolkit#readme"
+Issues = "https://github.com/David E. James/observability-toolkit/issues"
+Source = "https://github.com/David E. James/observability-toolkit"
+
+[tool.hatch.version]
+path = "src/observability_toolkit/__about__.py"
+
+[tool.hatch.envs.types]
+extra-dependencies = [
+  "mypy>=1.0.0",
+]
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/observability_toolkit tests}"
+
+[tool.coverage.run]
+source_pkgs = ["observability_toolkit", "tests"]
+branch = true
+parallel = true
+omit = [
+  "src/observability_toolkit/__about__.py",
+]
+
+[tool.coverage.paths]
+observability_toolkit = ["src/observability_toolkit", "*/observability-toolkit/src/observability_toolkit"]
+tests = ["tests", "*/observability-toolkit/tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]

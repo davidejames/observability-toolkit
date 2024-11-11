@@ -1,4 +1,4 @@
-# observaibility-toolkit
+# observability-toolkit
 
 [![PyPI - Version](https://img.shields.io/pypi/v/observability-toolkit.svg)](https://pypi.org/project/observability-toolkit)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/observability-toolkit.svg)](https://pypi.org/project/observability-toolkit)

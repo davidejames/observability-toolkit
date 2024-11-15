@@ -57,7 +57,7 @@ def _get_logging_subscribers(logging_config=None, logger=None):
 
 
 class PubSubManager:
-    def __init__(self, enum_obj, subscriptions, *, logger=None):
+    def __init__(self, enum_obj, subscriptions=None, *, logger=None):
         self.event_list = list(enum_obj)
         self.subs = {e:[] for e in self.event_list}
 
@@ -78,13 +78,13 @@ class PubSubManager:
             nonlocal success
             if not callable(sub):
                 _msg = BAD_TYPE_MSG.format(s=sub, e=event)
-                self.logging.warning(_msg)
+                self.logger.warning(_msg)
                 on_error(event, sub, _msg)
                 success = False
             else:
-                subs[event].append(sub)
-                _msg = SUCCESS_MSG.format(v=sub, e=event)
-                self.logging.info(_msg)
+                self.subs[event].append(sub)
+                _msg = SUCCESS_MSG.format(s=sub, e=event)
+                self.logger.info(_msg)
                 on_success(event, sub, _msg)
 
         _apply(subscriber, _sub)
@@ -102,13 +102,13 @@ class PubSubManager:
             _subs = self.subs[event]
             if sub not in _subs:
                 _msg = f'"{s}" is not a subscriber'
-                self.logging.warning(_msg)
+                self.logger.warning(_msg)
                 on_error(event, sub, _msg)
                 success = False
             else:
                 _subs.remove(sub)
                 _msg = f'removed {sub}'
-                self.logging.info(_msg)
+                self.logger.info(_msg)
                 on_success(event, sub, _msg)
 
         _apply(subscriber, _unsubscribe)
@@ -141,33 +141,40 @@ class PubSubManager:
         return success
 
 
-    async def async_publish(self, event, subscriptions, *args, **kwargs):
+    async def async_publish(self, event, context=None, on_error=None, *args, **kwargs):
         _subs = subscriptions.get(event)
         if _subs is None:
             return
 
-        errors = []
+        success = True
         for _sub in _subs:
             try:
                 await _acall_f(_sub, event, context, *args, **kwargs)
             except Exception as e:
-                errors.append(e)
+                success = False
+                if on_error is not None:
+                    on_error(event, context, *args, **kwargs)
+                self.logger.exception(f'publish error: {event}, {context}, {_sub}')
+
 
         return errors
 
 
-    def publish(self, event, context, *args, **kwargs):
+    def publish(self, event, context=None, on_error=None, *args, **kwargs):
         _subs = self.subs.get(event)
         if _subs is None:
             return
 
-        errors = []
+        success = True
         for _sub in _subs:
             try:
                 _sub(event, context, *args, **kwargs)
             except Exception as e:
-                errors.append(e)
+                success = False
+                if on_error is not None:
+                    on_error(event, context, *args, **kwargs)
+                self.logger.exception(f'publish error: {event}, {context}, {_sub}')
 
-        return errors
+        return success
 
 

@@ -27,12 +27,17 @@ classifiers = [
 dependencies = []
 
 [project.urls]
-Documentation = "https://github.com/David E. James/observability-toolkit#readme"
-Issues = "https://github.com/David E. James/observability-toolkit/issues"
-Source = "https://github.com/David E. James/observability-toolkit"
+Documentation = "https://github.com/davidejames/observability-toolkit#readme"
+Issues = "https://github.com/davidejames/observability-toolkit/issues"
+Source = "https://github.com/davidejames/observability-toolkit"
 
 [tool.hatch.version]
 path = "src/observability_toolkit/__about__.py"
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "src"
+]
 
 [tool.hatch.envs.types]
 extra-dependencies = [

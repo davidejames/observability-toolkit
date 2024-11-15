@@ -3,6 +3,5 @@
 # SPDX-License-Identifier: MIT
 # SPDX-FileType: SOURCE
 #┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈#
+__version__ = '0.0.1'
 
-
-from .simple import *
